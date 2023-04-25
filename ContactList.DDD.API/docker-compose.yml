@@ -1,0 +1,23 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  web_api:
+    image: web_api
+    container_name: web_api_application
+    ports:
+      - "5000:80"
+  sql:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    container_name: sql_server
+    ports: # not actually needed, because the two services are on the same network
+      - "1433:1433" 
+    environment:
+      - ACCEPT_EULA=y
+      - SA_PASSWORD=Carta14123!
+    volumes:
+      - ./database.sql:/opt/scripts/database.sql
+      - ./init.sh:/opt/scripts/init.sh
+    restart: "no"
+    entrypoint: [ "bash", "-c", "/opt/mssql/bin/sqlservr --accept-eula & sleep 30  & /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'Carta14123!' -d master -i /opt/scripts/database.sql && sleep infinity"]
+    #stdin_open: true
+    #command: tail -f /dev/null bash -c /opt/scripts/init.sh
+    #tty: true

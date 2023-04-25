@@ -1,0 +1,1 @@
+/opt/mssql/bin/sqlservr --accept-eula & sleep 100  & /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'Carta14123!' -d master -i /opt/scripts/database.sql
